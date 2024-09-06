@@ -40,6 +40,10 @@ let running = false;
 let noteLimiting = board.height - unitsize - 10;
 let colorBackground = "rgba(60,60,180,0.8)";
 
+let missNote = null;
+let SpeedMissNote = 50;
+let TimeDurationMissNote = SpeedMissNote;
+
 const note1 = document.querySelector("#green");
 const note2 = document.querySelector("#red");
 const note3 = document.querySelector("#yellow");
@@ -147,10 +151,30 @@ function moveNote(actualNotes) {
   });
 }
 
+function drawMissNote() {
+  TimeDurationMissNote--;
+
+  if (missNote && TimeDurationMissNote >= 0) {
+    ctx.font = "60px serif";
+    ctx.fontStretch = "extra-expanded";
+    ctx.fillStyle = "rgba(255,255,255,0.9)";
+    ctx.fillText(
+      "miss",
+      missNote.position - 2,
+      board.height - 80 + TimeDurationMissNote,
+      60
+    );
+  } else {
+    TimeDurationMissNote = SpeedMissNote;
+    missNote = null;
+  }
+}
+
 function checkMissNote(actualNotes) {
   actualNotes.forEach((note) => {
     if (note.velocityY >= noteLimiting + unitsize * 3) {
-      running = false;
+      missNote = note;
+      actualNotes.pop();
       randomNote();
     }
   });
@@ -163,10 +187,8 @@ function PlayNote(actualNotes, keypress) {
         actualNotes.pop();
         randomNote();
       } else {
-        running = false;
       }
     } else {
-      running = false;
     }
   });
 }
@@ -183,7 +205,6 @@ function convertKeys(event) {
   switch (true) {
     case keypress == keyA:
       PlayNote(currentNote, 0);
-      console.log("a");
       break;
     case keypress == keyS:
       PlayNote(currentNote, 1);
@@ -212,6 +233,7 @@ function gameStart() {
       TextDraw();
       drawNote(currentNote);
       checkMissNote(currentNote);
+      drawMissNote();
       requestAnimationFrame(tick);
     }
   }
