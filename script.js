@@ -39,13 +39,15 @@ let currentNote = [];
 let running = false;
 let noteLimiting = board.height - unitsize - 10;
 let colorBackground = "rgba(60,60,180,0.8)";
-let VelocityGenerateNote = 150
+let VelocityGenerateNote = 150;
 
 let missNote = null;
 let rightNote = null;
+let wrongNote = false
 let speedEffectGame = 50;
-let TimeDurationMissNote = speedEffectGame;
+let timeDurationMissNote = speedEffectGame;
 let timeDurationRightNote = speedEffectGame;
+let timeDurationWrongNote = speedEffectGame;
 
 const note1 = document.querySelector("#green");
 const note2 = document.querySelector("#red");
@@ -155,19 +157,19 @@ function moveNote(actualNotes) {
 }
 
 function drawEffectMissNote() {
-  TimeDurationMissNote--;
-  if (missNote && TimeDurationMissNote >= 0) {
+  timeDurationMissNote--;
+  if (missNote && timeDurationMissNote >= 0) {
     ctx.font = "60px serif";
     ctx.fontStretch = "extra-expanded";
     ctx.fillStyle = "rgba(255,255,255,0.9)";
     ctx.fillText(
       "MISS",
       missNote.position - 2,
-      board.height - 80 + TimeDurationMissNote,
+      board.height - 80 + timeDurationMissNote,
       60
     );
   } else {
-    TimeDurationMissNote = speedEffectGame;
+    timeDurationMissNote = speedEffectGame;
     missNote = null;
   }
 }
@@ -190,6 +192,25 @@ function drawEffectRightNote() {
   }
 }
 
+function drawEffectWrongNote() {
+  timeDurationWrongNote--
+
+  const gradient = ctx.createLinearGradient(0, -500, 0, 360);
+  gradient.addColorStop(0, 'rgba(0,0,0,0.1)');
+  gradient.addColorStop(1, 'rgba(100,50,150,0.2)');
+
+  ctx.fillStyle = gradient;
+
+
+  if(timeDurationWrongNote >= 0 && wrongNote == true) {
+    
+    ctx.fillRect(0,0,board.width,board.height)
+  } else {
+    timeDurationWrongNote = speedEffectGame /2
+    wrongNote = false
+  }
+}
+
 function checkMissNote(actualNotes) {
   actualNotes.forEach((note) => {
     if (note.velocityY >= noteLimiting + unitsize * 3) {
@@ -200,23 +221,24 @@ function checkMissNote(actualNotes) {
 }
 
 function PlayNote(actualNotes, keypress) {
-  actualNotes.forEach((note) => {
-    if (note.note == keypress) {
-      if (note.velocityY >= noteLimiting - unitsize + 20) {
+    if (actualNotes[0].note == keypress) {
+      if (actualNotes[0].velocityY >= noteLimiting - unitsize + 20) {
+        rightNote = actualNotes[0];
         actualNotes.shift();
-        rightNote = note;
       } else {
+       wrongNote = true
       }
-    } else {
+    } else {   
+      wrongNote = true
     }
-  });
+
 }
 
 function generateNote() {
-  if(running) {
+  if (running) {
     setTimeout(() => {
-      randomNote()
-      generateNote()
+      randomNote();
+      generateNote();
     }, VelocityGenerateNote);
   }
 }
@@ -264,6 +286,7 @@ function gameStart() {
       checkMissNote(currentNote);
       drawEffectRightNote();
       drawEffectMissNote();
+      drawEffectWrongNote()
       requestAnimationFrame(tick);
     }
   }
