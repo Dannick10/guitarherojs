@@ -95,9 +95,9 @@ function drawNote(actualNotes) {
   }
 
   function railsNote(note) {
-    const gradient = ctx.createLinearGradient(0, 200, 0, 100);
+    const gradient = ctx.createLinearGradient(0, 100, 0, 50);
     gradient.addColorStop(0, note.color);
-    gradient.addColorStop(1, colorBackground);
+    gradient.addColorStop(1, `rgba(50,50,255,0.5)`);
 
     ctx.fillStyle = gradient;
 
@@ -170,7 +170,7 @@ function moveNote(actualNotes) {
 function drawEffectMissNote() {
   timeDurationMissNote--;
   if (missNote && timeDurationMissNote >= 0) {
-    ctx.font = "60px serif";
+    ctx.font = "50px serif";
     ctx.fontStretch = "extra-expanded";
     ctx.fillStyle = "rgba(255,255,255,0.9)";
     ctx.fillText(
@@ -194,7 +194,7 @@ function drawEffectRightNote() {
     ctx.fillText(
       "️‍🔥",
       rightNote.position - 2,
-      board.height - 20 + Math.random(timeDurationRightNote / 2),
+      board.height - 20 + Math.floor(Math.random()*timeDurationRightNote/3),
       60
     );
   } else {
