@@ -39,7 +39,7 @@ let currentNote = [];
 let running = false;
 let noteLimiting = board.height - unitsize - 10;
 let colorBackground = "rgba(60,60,180,0.8)";
-let VelocityGenerateNote = 150;
+let VelocityGenerateNote = 500;
 
 let missNote = null;
 let rightNote = null;
@@ -66,12 +66,13 @@ addEventListener("keydown", convertKeys);
 function drawNote(actualNotes) {
   actualNotes.forEach((note) => {
     ctx.fillStyle = note.color;
-    circleNote(note);
     railsNote(note);
+    circleNote(note);
   });
 
   function circleNote(note) {
     ctx.beginPath();
+    ctx.fillStyle = note.color
     ctx.arc(
       note.position + notesSpacing * 2,
       note.velocityY,
@@ -79,7 +80,17 @@ function drawNote(actualNotes) {
       0,
       2 * Math.PI
     );
+    ctx.fill();
 
+    ctx.beginPath();
+    ctx.fillStyle = 'rgba(0,0,0,0.4)'
+    ctx.arc(
+      note.position + notesSpacing * 2,
+      note.velocityY,
+      unitsize/3,
+      0,
+      2 * Math.PI
+    );
     ctx.fill();
   }
 
@@ -91,10 +102,10 @@ function drawNote(actualNotes) {
     ctx.fillStyle = gradient;
 
     ctx.fillRect(
-      note.position - 4,
-      note.velocityY - unitsize,
-      unitsize,
-      unitsize
+      note.position+5,
+      note.velocityY - unitsize-10,
+      unitsize/2,
+      unitsize+20
     );
   }
 }
