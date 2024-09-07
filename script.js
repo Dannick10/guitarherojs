@@ -39,9 +39,10 @@ let currentNote = [];
 let running = false;
 let noteLimiting = board.height - unitsize - 10;
 let colorBackground = "rgba(60,60,180,0.8)";
+let VelocityGenerateNote = 150
 
 let missNote = null;
-let rightNote = null
+let rightNote = null;
 let speedEffectGame = 50;
 let TimeDurationMissNote = speedEffectGame;
 let timeDurationRightNote = speedEffectGame;
@@ -103,26 +104,26 @@ function drawGuitar() {
 
   listChordsGuitar();
 
-function backgroundGuitar() {
-  const gradient = ctx.createLinearGradient(0, 0, 0, 500);
-  gradient.addColorStop(0, colorBackground);
-  gradient.addColorStop(1, "rgba(0,0,0,0.9)");
-  ctx.fillStyle = gradient;
+  function backgroundGuitar() {
+    const gradient = ctx.createLinearGradient(0, 0, 0, 500);
+    gradient.addColorStop(0, colorBackground);
+    gradient.addColorStop(1, "rgba(0,0,0,0.9)");
+    ctx.fillStyle = gradient;
 
-  ctx.fillRect(0, 0, board.width, board.height);
-}
-
-function lineLimitingGuitar() {
-  ctx.fillStyle = "rgba(255,255,255,0.9)";
-  ctx.fillRect(0, noteLimiting, board.width, 100);
-}
-
-function listChordsGuitar() {
-  ctx.fillStyle = "rgba(0,0,0,0.2)";
-  for (let i = 0; i <= tileNotes.length; i++) {
-    ctx.fillRect(notesSpacing * i * 7, 0, 10, board.height);
+    ctx.fillRect(0, 0, board.width, board.height);
   }
-}
+
+  function lineLimitingGuitar() {
+    ctx.fillStyle = "rgba(255,255,255,0.9)";
+    ctx.fillRect(0, noteLimiting, board.width, 100);
+  }
+
+  function listChordsGuitar() {
+    ctx.fillStyle = "rgba(0,0,0,0.2)";
+    for (let i = 0; i <= tileNotes.length; i++) {
+      ctx.fillRect(notesSpacing * i * 7, 0, 10, board.height);
+    }
+  }
 }
 
 function TextDraw() {
@@ -172,21 +173,20 @@ function drawEffectMissNote() {
 }
 
 function drawEffectRightNote() {
-  timeDurationRightNote--
-  if(rightNote && timeDurationRightNote >= 0) {
+  timeDurationRightNote--;
+  if (rightNote && timeDurationRightNote >= 0) {
     ctx.font = "50px serif";
     ctx.fontStretch = "extra-expanded";
     ctx.fillStyle = "rgba(255,255,255,0.9)";
     ctx.fillText(
       "️‍🔥",
-      rightNote.position -2,
-      board.height - 20 +  Math.random(timeDurationRightNote / 2),
+      rightNote.position - 2,
+      board.height - 20 + Math.random(timeDurationRightNote / 2),
       60
     );
-
   } else {
-    timeDurationRightNote = speedEffectGame/2;
-    rightNote = null
+    timeDurationRightNote = speedEffectGame / 2;
+    rightNote = null;
   }
 }
 
@@ -194,8 +194,7 @@ function checkMissNote(actualNotes) {
   actualNotes.forEach((note) => {
     if (note.velocityY >= noteLimiting + unitsize * 3) {
       missNote = note;
-      actualNotes.pop();
-      randomNote();
+      actualNotes.shift();
     }
   });
 }
@@ -204,14 +203,22 @@ function PlayNote(actualNotes, keypress) {
   actualNotes.forEach((note) => {
     if (note.note == keypress) {
       if (note.velocityY >= noteLimiting - unitsize + 20) {
-        actualNotes.pop();
-        randomNote();
-        rightNote = note
+        actualNotes.shift();
+        rightNote = note;
       } else {
       }
     } else {
     }
   });
+}
+
+function generateNote() {
+  if(running) {
+    setTimeout(() => {
+      randomNote()
+      generateNote()
+    }, VelocityGenerateNote);
+  }
 }
 
 function convertKeys(event) {
@@ -244,7 +251,8 @@ function convertKeys(event) {
 
 function gameStart() {
   running = true;
-  randomNote();
+
+  generateNote();
 
   function tick() {
     if (running == true) {
