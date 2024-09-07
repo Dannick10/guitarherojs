@@ -41,8 +41,10 @@ let noteLimiting = board.height - unitsize - 10;
 let colorBackground = "rgba(60,60,180,0.8)";
 
 let missNote = null;
-let SpeedMissNote = 50;
-let TimeDurationMissNote = SpeedMissNote;
+let rightNote = null
+let speedEffectGame = 50;
+let TimeDurationMissNote = speedEffectGame;
+let timeDurationRightNote = speedEffectGame;
 
 const note1 = document.querySelector("#green");
 const note2 = document.querySelector("#red");
@@ -100,7 +102,6 @@ function drawGuitar() {
   lineLimitingGuitar();
 
   listChordsGuitar();
-}
 
 function backgroundGuitar() {
   const gradient = ctx.createLinearGradient(0, 0, 0, 500);
@@ -121,6 +122,7 @@ function listChordsGuitar() {
   for (let i = 0; i <= tileNotes.length; i++) {
     ctx.fillRect(notesSpacing * i * 7, 0, 10, board.height);
   }
+}
 }
 
 function TextDraw() {
@@ -151,22 +153,40 @@ function moveNote(actualNotes) {
   });
 }
 
-function drawMissNote() {
+function drawEffectMissNote() {
   TimeDurationMissNote--;
-
   if (missNote && TimeDurationMissNote >= 0) {
     ctx.font = "60px serif";
     ctx.fontStretch = "extra-expanded";
     ctx.fillStyle = "rgba(255,255,255,0.9)";
     ctx.fillText(
-      "miss",
+      "MISS",
       missNote.position - 2,
       board.height - 80 + TimeDurationMissNote,
       60
     );
   } else {
-    TimeDurationMissNote = SpeedMissNote;
+    TimeDurationMissNote = speedEffectGame;
     missNote = null;
+  }
+}
+
+function drawEffectRightNote() {
+  timeDurationRightNote--
+  if(rightNote && timeDurationRightNote >= 0) {
+    ctx.font = "50px serif";
+    ctx.fontStretch = "extra-expanded";
+    ctx.fillStyle = "rgba(255,255,255,0.9)";
+    ctx.fillText(
+      "️‍🔥",
+      rightNote.position -2,
+      board.height - 20 +  Math.random(timeDurationRightNote / 2),
+      60
+    );
+
+  } else {
+    timeDurationRightNote = speedEffectGame/2;
+    rightNote = null
   }
 }
 
@@ -186,6 +206,7 @@ function PlayNote(actualNotes, keypress) {
       if (note.velocityY >= noteLimiting - unitsize + 20) {
         actualNotes.pop();
         randomNote();
+        rightNote = note
       } else {
       }
     } else {
@@ -233,7 +254,8 @@ function gameStart() {
       TextDraw();
       drawNote(currentNote);
       checkMissNote(currentNote);
-      drawMissNote();
+      drawEffectRightNote();
+      drawEffectMissNote();
       requestAnimationFrame(tick);
     }
   }
