@@ -42,6 +42,7 @@ let running = false;
 let noteLimiting = board.height - unitsize - 10;
 let colorBackground = "rgba(60,60,180,0.8)";
 let VelocityGenerateNote = 500;
+let dificulty = 5;
 
 let missNote = null;
 let rightNote = null;
@@ -58,6 +59,7 @@ let CurrentMatch = {
   totalRightNote: 0,
   totalWrongNote: 0,
   totalComboNote: 0,
+  addComboNote: 0,
   rangerLineDot: 5,
 };
 
@@ -159,14 +161,16 @@ function TextDraw() {
 }
 
 function randomNote() {
-  let indexNote = generateNumber();
+  let indexNote = generateNumber(dificulty);
 
-  function generateNumber() {
-    return Math.floor(Math.random() * tileNotes.length);
+  function generateNumber(dificulty) {
+    return Math.floor(Math.random() * dificulty);
   }
   let selectNote = { ...tileNotes[indexNote] };
 
   currentNote.push(selectNote);
+
+  managerPointsMatch("ADDNOTE");
 }
 
 function clearBoard() {
@@ -194,14 +198,16 @@ function drawDotPoint() {
   ctxDot.fillRect(0, 0, width, middleHeight / 2);
 
   function drawmarkerLineDot() {
+    let porcentLineDot = 2 * 10 * CurrentMatch.rangerLineDot;
+    let PositionHeightDot = Math.min(Math.max(0, porcentLineDot / 2), 90);
+    let invertedPositionHeightDot = 90 - PositionHeightDot;
+    
     ctxDot.fillStyle = "white";
-    ctxDot.fillRect(0, middleHeight / 2, width, 5);
+    ctxDot.fillRect(0, invertedPositionHeightDot, width, 5);
   }
 
   drawmarkerLineDot();
 }
-
-drawDotPoint();
 
 function drawEffectMissNote() {
   timeDurationMissNote--;
@@ -273,7 +279,7 @@ function PlayNote(actualNotes, keypress) {
     if (actualNotes[0].velocityY >= noteLimiting - unitsize + 20) {
       rightNote = actualNotes[0];
       managerPointsMatch("ADDPOINTS");
-      managerPointsMatch("ADDCOMBONOTE")
+      managerPointsMatch("ADDCOMBONOTE");
       managerPointsMatch("ADDRIGHTNOTE");
       actualNotes.shift();
     } else {
@@ -325,26 +331,45 @@ function convertKeys(event) {
 
 function managerPointsMatch(action) {
   switch (true) {
+    case action == "ADDNOTE":
+      CurrentMatch.totalNoteMatch++;
+      break;
     case action == "ADDPOINTS":
       CurrentMatch.totalpoints++;
       break;
     case action == "ADDRIGHTNOTE":
+      managerRangerLineDot(1);
       CurrentMatch.totalRightNote++;
       break;
     case action == "ADDMISSNOTE":
       CurrentMatch.totalMissNote++;
-      CurrentMatch.totalComboNote = 0;
+      managerRangerLineDot(-1);
+      CurrentMatch.addComboNote = 0;
       break;
     case action == "ADDWRONGNOTE":
       CurrentMatch.totalWrongNote++;
-      CurrentMatch.totalComboNote = 0;
+      managerRangerLineDot(-1);
+      CurrentMatch.addComboNote = 0;
       break;
     case action == "ADDCOMBONOTE":
-      CurrentMatch.totalComboNote++;
+      CurrentMatch.addComboNote++;
+
+      if (CurrentMatch.addComboNote >= CurrentMatch.totalComboNote) {
+        CurrentMatch.totalComboNote = CurrentMatch.addComboNote;
+      }
+
       break;
   }
 
-  console.log(CurrentMatch.totalComboNote);
+  function managerRangerLineDot(action) {
+    CurrentMatch.rangerLineDot += action;
+
+    CurrentMatch.rangerLineDot = Math.min(
+      Math.max(0, CurrentMatch.rangerLineDot),
+      10
+    );
+  }
+  console.table(CurrentMatch);
 }
 
 function gameStart() {
@@ -363,6 +388,7 @@ function gameStart() {
       drawEffectRightNote();
       drawEffectMissNote();
       drawEffectWrongNote();
+      drawDotPoint();
       requestAnimationFrame(tick);
     }
   }
