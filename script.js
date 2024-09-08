@@ -1,5 +1,7 @@
-const board = document.querySelector("canvas");
+const board = document.querySelector("#game");
 const ctx = board.getContext("2d");
+const boardDot = document.querySelector("#dotPoint");
+const ctxDot = boardDot.getContext("2d");
 const vel = 10,
   unitsize = 40,
   notesSpacing = 8;
@@ -43,11 +45,21 @@ let VelocityGenerateNote = 500;
 
 let missNote = null;
 let rightNote = null;
-let wrongNote = false
+let wrongNote = false;
 let speedEffectGame = 50;
 let timeDurationMissNote = speedEffectGame;
 let timeDurationRightNote = speedEffectGame;
 let timeDurationWrongNote = speedEffectGame;
+
+let CurrentMatch = {
+  totalpoints: 0,
+  totalNoteMatch: 0,
+  totalMissNote: 0,
+  totalRightNote: 0,
+  totalWrongNote: 0,
+  totalComboNote: 0,
+  rangerLineDot: 5,
+};
 
 const note1 = document.querySelector("#green");
 const note2 = document.querySelector("#red");
@@ -66,13 +78,13 @@ addEventListener("keydown", convertKeys);
 function drawNote(actualNotes) {
   actualNotes.forEach((note) => {
     ctx.fillStyle = note.color;
-    railsNote(note);
+
     circleNote(note);
   });
 
   function circleNote(note) {
     ctx.beginPath();
-    ctx.fillStyle = note.color
+    ctx.fillStyle = note.color;
     ctx.arc(
       note.position + notesSpacing * 2,
       note.velocityY,
@@ -83,11 +95,11 @@ function drawNote(actualNotes) {
     ctx.fill();
 
     ctx.beginPath();
-    ctx.fillStyle = 'rgba(0,0,0,0.4)'
+    ctx.fillStyle = "rgba(0,0,0,0.4)";
     ctx.arc(
       note.position + notesSpacing * 2,
       note.velocityY,
-      unitsize/3,
+      unitsize / 3,
       0,
       2 * Math.PI
     );
@@ -102,10 +114,10 @@ function drawNote(actualNotes) {
     ctx.fillStyle = gradient;
 
     ctx.fillRect(
-      note.position+5,
-      note.velocityY - unitsize-10,
-      unitsize/2,
-      unitsize+20
+      note.position + 5,
+      note.velocityY - unitsize - 10,
+      unitsize / 2,
+      unitsize + 20
     );
   }
 }
@@ -167,6 +179,30 @@ function moveNote(actualNotes) {
   });
 }
 
+function drawDotPoint() {
+  let width = boardDot.width,
+    height = board.height;
+  let middleHeight = height / 8;
+
+  ctxDot.fillStyle = "#F21F0C";
+  ctxDot.fillRect(0, 0, width, height);
+
+  ctxDot.fillStyle = "#F2A413";
+  ctxDot.fillRect(0, 0, width, middleHeight);
+
+  ctxDot.fillStyle = "#A0A603";
+  ctxDot.fillRect(0, 0, width, middleHeight / 2);
+
+  function drawmarkerLineDot() {
+    ctxDot.fillStyle = "white";
+    ctxDot.fillRect(0, middleHeight / 2, width, 5);
+  }
+
+  drawmarkerLineDot();
+}
+
+drawDotPoint();
+
 function drawEffectMissNote() {
   timeDurationMissNote--;
   if (missNote && timeDurationMissNote >= 0) {
@@ -194,7 +230,9 @@ function drawEffectRightNote() {
     ctx.fillText(
       "️‍🔥",
       rightNote.position - 2,
-      board.height - 20 + Math.floor(Math.random()*timeDurationRightNote/3),
+      board.height -
+        20 +
+        Math.floor((Math.random() * timeDurationRightNote) / 3),
       60
     );
   } else {
@@ -204,21 +242,19 @@ function drawEffectRightNote() {
 }
 
 function drawEffectWrongNote() {
-  timeDurationWrongNote--
+  timeDurationWrongNote--;
 
   const gradient = ctx.createLinearGradient(0, -500, 0, 360);
-  gradient.addColorStop(0, 'rgba(0,0,0,0.1)');
-  gradient.addColorStop(1, 'rgba(100,50,150,0.2)');
+  gradient.addColorStop(0, "rgba(0,0,0,0.1)");
+  gradient.addColorStop(1, "rgba(100,50,150,0.2)");
 
   ctx.fillStyle = gradient;
 
-
-  if(timeDurationWrongNote >= 0 && wrongNote == true) {
-    
-    ctx.fillRect(0,0,board.width,board.height)
+  if (timeDurationWrongNote >= 0 && wrongNote == true) {
+    ctx.fillRect(0, 0, board.width, board.height);
   } else {
-    timeDurationWrongNote = speedEffectGame /2
-    wrongNote = false
+    timeDurationWrongNote = speedEffectGame / 2;
+    wrongNote = false;
   }
 }
 
@@ -227,22 +263,27 @@ function checkMissNote(actualNotes) {
     if (note.velocityY >= noteLimiting + unitsize * 3) {
       missNote = note;
       actualNotes.shift();
+      managerPointsMatch("ADDMISSNOTE");
     }
   });
 }
 
 function PlayNote(actualNotes, keypress) {
-    if (actualNotes[0].note == keypress) {
-      if (actualNotes[0].velocityY >= noteLimiting - unitsize + 20) {
-        rightNote = actualNotes[0];
-        actualNotes.shift();
-      } else {
-       wrongNote = true
-      }
-    } else {   
-      wrongNote = true
+  if (actualNotes[0].note == keypress) {
+    if (actualNotes[0].velocityY >= noteLimiting - unitsize + 20) {
+      rightNote = actualNotes[0];
+      managerPointsMatch("ADDPOINTS");
+      managerPointsMatch("ADDCOMBONOTE")
+      managerPointsMatch("ADDRIGHTNOTE");
+      actualNotes.shift();
+    } else {
+      wrongNote = true;
+      managerPointsMatch("ADDWRONGNOTE");
     }
-
+  } else {
+    wrongNote = true;
+    managerPointsMatch("ADDWRONGNOTE");
+  }
 }
 
 function generateNote() {
@@ -282,6 +323,30 @@ function convertKeys(event) {
   }
 }
 
+function managerPointsMatch(action) {
+  switch (true) {
+    case action == "ADDPOINTS":
+      CurrentMatch.totalpoints++;
+      break;
+    case action == "ADDRIGHTNOTE":
+      CurrentMatch.totalRightNote++;
+      break;
+    case action == "ADDMISSNOTE":
+      CurrentMatch.totalMissNote++;
+      CurrentMatch.totalComboNote = 0;
+      break;
+    case action == "ADDWRONGNOTE":
+      CurrentMatch.totalWrongNote++;
+      CurrentMatch.totalComboNote = 0;
+      break;
+    case action == "ADDCOMBONOTE":
+      CurrentMatch.totalComboNote++;
+      break;
+  }
+
+  console.log(CurrentMatch.totalComboNote);
+}
+
 function gameStart() {
   running = true;
 
@@ -297,7 +362,7 @@ function gameStart() {
       checkMissNote(currentNote);
       drawEffectRightNote();
       drawEffectMissNote();
-      drawEffectWrongNote()
+      drawEffectWrongNote();
       requestAnimationFrame(tick);
     }
   }
