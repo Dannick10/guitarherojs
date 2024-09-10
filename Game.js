@@ -44,6 +44,14 @@ class Game {
     this.timeDurationRightNote = this.speedEffectGame;
     this.timeDurationWrongNote = this.speedEffectGame;
 
+    this.controls = {
+        note1: 'a',
+        note2: 's',
+        note3: 'j',
+        note4: 'k',
+        note5: 'l',
+    }
+
     this.CurrentMatch = {
       totalpoints: 0,
       totalNoteMatch: 0,
@@ -327,20 +335,21 @@ class Game {
   }
 
   convertKeys(event) {
-    switch (event.key) {
-      case "a":
+    let keyPress = event.key.toLowerCase()
+    switch (keyPress) {
+      case this.controls.note1:
         this.PlayNote(0);
         break;
-      case "s":
+      case this.controls.note2:
         this.PlayNote(1);
         break;
-      case "j":
+      case this.controls.note3:
         this.PlayNote(2);
         break;
-      case "k":
+      case this.controls.note4:
         this.PlayNote(3);
         break;
-      case "l":
+      case this.controls.note5:
         this.PlayNote(4);
         break;
     }
@@ -384,5 +393,10 @@ class Game {
 
 const guitarHeroGame = new Game();
 guitarHeroGame.dificulty = 5
-guitarHeroGame.VelocityGenerateNote = 150
+guitarHeroGame.VelocityGenerateNote = 200
+guitarHeroGame.controls.note1 = 'a'
+guitarHeroGame.controls.note2 = 's'
+guitarHeroGame.controls.note3 = 'j'
+guitarHeroGame.controls.note4 = 'k'
+guitarHeroGame.controls.note5 = 'l'
 guitarHeroGame.startGame();
