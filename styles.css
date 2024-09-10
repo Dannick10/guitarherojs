@@ -39,6 +39,20 @@ main{
     border-radius: 15px;
 }
 
+.pointsScore{
+    background: linear-gradient(rgba(60,60,180,0.8),rgba(16, 16, 71, 0.8));
+    color: white;
+    position: absolute; 
+    bottom:3.8em;
+    display: flex;
+    left: -3.5em;
+    justify-content: center;
+    align-items: center;
+    width: 3.5em;
+    border-top-left-radius: 1em;
+    border-bottom-left-radius: 1em;
+}
+
 
 .controls div {
     width: 2.9rem;

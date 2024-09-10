@@ -2,6 +2,7 @@ const board = document.querySelector("#game");
 const ctx = board.getContext("2d");
 const boardDot = document.querySelector("#dotPoint");
 const ctxDot = boardDot.getContext("2d");
+const pointBoard = document.querySelector(".pointsScore p");
 const vel = 10,
   unitsize = 40,
   notesSpacing = 8;
@@ -41,7 +42,7 @@ let currentNote = [];
 let running = false;
 let noteLimiting = board.height - unitsize - 10;
 let colorBackground = "rgba(60,60,180,0.8)";
-let VelocityGenerateNote = 500;
+let VelocityGenerateNote = 200;
 let dificulty = 5;
 
 let missNote = null;
@@ -201,7 +202,7 @@ function drawDotPoint() {
     let porcentLineDot = 2 * 10 * CurrentMatch.rangerLineDot;
     let PositionHeightDot = Math.min(Math.max(0, porcentLineDot / 2), 90);
     let invertedPositionHeightDot = 90 - PositionHeightDot;
-    
+
     ctxDot.fillStyle = "white";
     ctxDot.fillRect(0, invertedPositionHeightDot, width, 5);
   }
@@ -245,6 +246,10 @@ function drawEffectRightNote() {
     timeDurationRightNote = speedEffectGame / 2;
     rightNote = null;
   }
+}
+
+function gamePause() {
+  running = false;
 }
 
 function drawEffectWrongNote() {
@@ -335,11 +340,11 @@ function managerPointsMatch(action) {
       CurrentMatch.totalNoteMatch++;
       break;
     case action == "ADDPOINTS":
-      CurrentMatch.totalpoints++;
+      CurrentMatch.totalpoints += CurrentMatch.rangerLineDot;
       break;
     case action == "ADDRIGHTNOTE":
-      managerRangerLineDot(1);
       CurrentMatch.totalRightNote++;
+      managerRangerLineDot(1);
       break;
     case action == "ADDMISSNOTE":
       CurrentMatch.totalMissNote++;
@@ -357,7 +362,6 @@ function managerPointsMatch(action) {
       if (CurrentMatch.addComboNote >= CurrentMatch.totalComboNote) {
         CurrentMatch.totalComboNote = CurrentMatch.addComboNote;
       }
-
       break;
   }
 
@@ -365,11 +369,34 @@ function managerPointsMatch(action) {
     CurrentMatch.rangerLineDot += action;
 
     CurrentMatch.rangerLineDot = Math.min(
-      Math.max(0, CurrentMatch.rangerLineDot),
+      Math.max(-3, CurrentMatch.rangerLineDot),
       10
     );
   }
-  console.table(CurrentMatch);
+
+  if (CurrentMatch.rangerLineDot <= -3) {
+    gamePause();
+  }
+}
+
+function UpdatePointsScreen() {
+  function totalPoints() {
+    pointBoard.innerHTML = +CurrentMatch.totalpoints;
+  }
+
+  totalPoints();
+
+  function UpddateCurrentCombo() {
+    if(CurrentMatch.addComboNote >= 50) {
+
+      ctx.font = "30px serif";
+      ctx.fontStretch = "extra-expanded";
+      ctx.fillStyle = "rgba(255,255,255,0.9)";
+      ctx.fillText(CurrentMatch.addComboNote, board.width / 2 - 10, board.height / 2 + 50, 140);
+    }
+    }
+
+  UpddateCurrentCombo();
 }
 
 function gameStart() {
@@ -389,6 +416,7 @@ function gameStart() {
       drawEffectMissNote();
       drawEffectWrongNote();
       drawDotPoint();
+      UpdatePointsScreen();
       requestAnimationFrame(tick);
     }
   }
