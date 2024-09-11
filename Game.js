@@ -45,12 +45,12 @@ class Game {
     this.timeDurationWrongNote = this.speedEffectGame;
 
     this.controls = {
-        note1: 'a',
-        note2: 's',
-        note3: 'j',
-        note4: 'k',
-        note5: 'l',
-    }
+      note1: "a",
+      note2: "s",
+      note3: "j",
+      note4: "k",
+      note5: "l",
+    };
 
     this.CurrentMatch = {
       totalpoints: 0,
@@ -276,12 +276,10 @@ class Game {
       } else {
         this.wrongNote = true;
         this.managerPointsMatch("ADDWRONGNOTE");
-        this.managerPointsMatch("RESETCOMBO");
       }
     } else {
       this.wrongNote = true;
       this.managerPointsMatch("ADDWRONGNOTE");
-      this.managerPointsMatch("RESETCOMBO");
     }
   }
 
@@ -294,30 +292,25 @@ class Game {
       case "ADDMISSNOTE":
         this.CurrentMatch.totalMissNote += 1;
         this.CurrentMatch.addComboNote = 0;
-        this.manegeLineDot(-1)
+        this.manegeLineDot(-1);
         break;
-        case "ADDRIGHTNOTE":
-          this.manegeLineDot(1)
-          this.CurrentMatch.totalRightNote += 1;
-          break;
-          case "ADDWRONGNOTE":
-          this.manegeLineDot(-1)
+      case "ADDRIGHTNOTE":
+        this.manegeLineDot(1);
+        this.CurrentMatch.totalRightNote += 1;
+        break;
+      case "ADDWRONGNOTE":
+        this.manegeLineDot(-1);
         this.CurrentMatch.totalWrongNote += 1;
         this.CurrentMatch.addComboNote = 0;
         break;
       case "ADDCOMBONOTE":
         this.CurrentMatch.addComboNote += 1;
-        this.CurrentMatch.addComboNote = this.CurrentMatch.totalComboNote * 2;
 
         if (
           this.CurrentMatch.addComboNote >= this.CurrentMatch.totalComboNote
         ) {
           this.CurrentMatch.totalComboNote = this.CurrentMatch.addComboNote;
         }
-        break;
-      case "RESETCOMBO":
-        this.CurrentMatch.totalComboNote = 0;
-        this.CurrentMatch.addComboNote = 0;
         break;
       case "ADDNOTE":
         this.CurrentMatch.totalNoteMatch += 1;
@@ -334,8 +327,22 @@ class Game {
     );
   }
 
+  UpddateCurrentCombo() {
+    if (this.CurrentMatch.addComboNote >= 50) {
+      this.ctx.font = "30px serif";
+      this.ctx.fontStretch = "extra-expanded";
+      this.ctx.fillStyle = "rgba(255,255,255,0.9)";
+      this.ctx.fillText(
+        this.CurrentMatch.addComboNote,
+        this.board.width / 2 - 10,
+        this.board.height / 2 + 50,
+        140
+      );
+    }
+  }
+
   convertKeys(event) {
-    let keyPress = event.key.toLowerCase()
+    let keyPress = event.key.toLowerCase();
     switch (keyPress) {
       case this.controls.note1:
         this.PlayNote(0);
@@ -371,8 +378,7 @@ class Game {
   }
 
   overGame() {
-    if(this.CurrentMatch.rangerLineDot <= -3)
-    this.running = false
+    if (this.CurrentMatch.rangerLineDot <= -3) this.running = false;
   }
 
   gameLoop() {
@@ -385,6 +391,7 @@ class Game {
       this.moveNote();
       this.checkMissNote();
       this.drawEffects();
+      this.UpddateCurrentCombo();
       this.overGame();
       requestAnimationFrame(() => this.gameLoop());
     }
@@ -392,11 +399,11 @@ class Game {
 }
 
 const guitarHeroGame = new Game();
-guitarHeroGame.dificulty = 5
-guitarHeroGame.VelocityGenerateNote = 200
-guitarHeroGame.controls.note1 = 'a'
-guitarHeroGame.controls.note2 = 's'
-guitarHeroGame.controls.note3 = 'j'
-guitarHeroGame.controls.note4 = 'k'
-guitarHeroGame.controls.note5 = 'l'
+guitarHeroGame.dificulty = 5;
+guitarHeroGame.VelocityGenerateNote = 200;
+guitarHeroGame.controls.note1 = "a";
+guitarHeroGame.controls.note2 = "s";
+guitarHeroGame.controls.note3 = "j";
+guitarHeroGame.controls.note4 = "k";
+guitarHeroGame.controls.note5 = "l";
 guitarHeroGame.startGame();
