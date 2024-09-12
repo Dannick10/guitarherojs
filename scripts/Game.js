@@ -1,4 +1,4 @@
-class Game {
+export class Game {
   constructor() {
     this.board = document.querySelector("#game");
     this.ctx = this.board.getContext("2d");
@@ -43,7 +43,7 @@ class Game {
     this.timeDurationMissNote = this.speedEffectGame;
     this.timeDurationRightNote = this.speedEffectGame;
     this.timeDurationWrongNote = this.speedEffectGame;
-
+    
     this.controls = {
       note1: "a",
       note2: "s",
@@ -397,13 +397,3 @@ class Game {
     }
   }
 }
-
-const guitarHeroGame = new Game();
-guitarHeroGame.dificulty = 5;
-guitarHeroGame.VelocityGenerateNote = 200;
-guitarHeroGame.controls.note1 = "a";
-guitarHeroGame.controls.note2 = "s";
-guitarHeroGame.controls.note3 = "j";
-guitarHeroGame.controls.note4 = "k";
-guitarHeroGame.controls.note5 = "l";
-guitarHeroGame.startGame();
