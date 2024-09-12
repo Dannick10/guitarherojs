@@ -12,5 +12,5 @@ guitarHeroGame.controls.note4 = "2";
 guitarHeroGame.controls.note5 = "3";
 guitarHeroGame.startGame();
 
-const timeGame = new Time(0,3);
+const timeGame = new Time(0,100);
 timeGame.startMatchTime()

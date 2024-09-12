@@ -1,9 +1,11 @@
 export class Game {
   constructor() {
-    this.board = document.querySelector("#game");
-    this.ctx = this.board.getContext("2d");
-    this.boardDot = document.querySelector("#dotPoint");
-    this.ctxDot = this.boardDot.getContext("2d");
+    this.HTMLboard = document.querySelector("#game");
+    this.HTMLdot = document.querySelector("#dotPoint");
+    this.HTMLprogressMatch = document.querySelector("#progressMatch");
+    this.ctxBoard = this.HTMLboard.getContext("2d");
+    this.ctxDot = this.HTMLdot.getContext("2d");
+    this.ctxProgressMatch = this.HTMLprogressMatch.getContext("2d");
     this.pointBoard = document.querySelector(".pointsScore p");
     this.vel = 10;
     this.unitsize = 40;
@@ -32,7 +34,7 @@ export class Game {
     ];
     this.currentNote = [];
     this.running = false;
-    this.noteLimiting = this.board.height - this.unitsize - 10;
+    this.noteLimiting = this.HTMLboard.height - this.unitsize - 10;
     this.colorBackground = "rgba(60,60,180,0.8)";
     this.VelocityGenerateNote = 200;
     this.dificulty = 3;
@@ -43,7 +45,8 @@ export class Game {
     this.timeDurationMissNote = this.speedEffectGame;
     this.timeDurationRightNote = this.speedEffectGame;
     this.timeDurationWrongNote = this.speedEffectGame;
-    
+    this.progressLine = 0
+
     this.controls = {
       note1: "a",
       note2: "s",
@@ -87,33 +90,33 @@ export class Game {
 
   drawNote() {
     this.currentNote.forEach((note) => {
-      this.ctx.fillStyle = note.color;
+      this.ctxBoard.fillStyle = note.color;
       this.circleNote(note);
     });
   }
 
   circleNote(note) {
-    this.ctx.beginPath();
-    this.ctx.fillStyle = note.color;
-    this.ctx.arc(
+    this.ctxBoard.beginPath();
+    this.ctxBoard.fillStyle = note.color;
+    this.ctxBoard.arc(
       note.position + this.notesSpacing * 2,
       note.velocityY,
       this.unitsize / 2,
       0,
       2 * Math.PI
     );
-    this.ctx.fill();
+    this.ctxBoard.fill();
 
-    this.ctx.beginPath();
-    this.ctx.fillStyle = "rgba(0,0,0,0.4)";
-    this.ctx.arc(
+    this.ctxBoard.beginPath();
+    this.ctxBoard.fillStyle = "rgba(0,0,0,0.4)";
+    this.ctxBoard.arc(
       note.position + this.notesSpacing * 2,
       note.velocityY,
       this.unitsize / 3,
       0,
       2 * Math.PI
     );
-    this.ctx.fill();
+    this.ctxBoard.fill();
   }
 
   drawGuitar() {
@@ -123,33 +126,38 @@ export class Game {
   }
 
   backgroundGuitar() {
-    const gradient = this.ctx.createLinearGradient(0, 0, 0, 500);
+    const gradient = this.ctxBoard.createLinearGradient(0, 0, 0, 500);
     gradient.addColorStop(0, this.colorBackground);
     gradient.addColorStop(1, "rgba(0,0,0,0.9)");
-    this.ctx.fillStyle = gradient;
-    this.ctx.fillRect(0, 0, this.board.width, this.board.height);
+    this.ctxBoard.fillStyle = gradient;
+    this.ctxBoard.fillRect(0, 0, this.HTMLboard.width, this.HTMLboard.height);
   }
 
   lineLimitingGuitar() {
-    this.ctx.fillStyle = "rgba(255,255,255,0.9)";
-    this.ctx.fillRect(0, this.noteLimiting, this.board.width, 100);
+    this.ctxBoard.fillStyle = "rgba(255,255,255,0.9)";
+    this.ctxBoard.fillRect(0, this.noteLimiting, this.HTMLboard.width, 100);
   }
 
   listChordsGuitar() {
-    this.ctx.fillStyle = "rgba(0,0,0,0.2)";
+    this.ctxBoard.fillStyle = "rgba(0,0,0,0.2)";
     for (let i = 0; i <= this.tileNotes.length; i++) {
-      this.ctx.fillRect(this.notesSpacing * i * 7, 0, 10, this.board.height);
+      this.ctxBoard.fillRect(
+        this.notesSpacing * i * 7,
+        0,
+        10,
+        this.HTMLboard.height
+      );
     }
   }
 
   TextDraw() {
-    this.ctx.font = "90px serif";
-    this.ctx.fontStretch = "extra-expanded";
-    this.ctx.fillStyle = "rgba(255,255,255,0.9)";
-    this.ctx.fillText(
+    this.ctxBoard.font = "90px serif";
+    this.ctxBoard.fontStretch = "extra-expanded";
+    this.ctxBoard.fillStyle = "rgba(255,255,255,0.9)";
+    this.ctxBoard.fillText(
       "Guitar hero",
-      this.board.width / 4,
-      this.board.height / 2,
+      this.HTMLboard.width / 4,
+      this.HTMLboard.height / 2,
       140
     );
   }
@@ -166,7 +174,7 @@ export class Game {
   }
 
   clearBoard() {
-    this.ctx.clearRect(0, 0, this.board.width, this.board.height);
+    this.ctxBoard.clearRect(0, 0, this.HTMLboard.width, this.HTMLboard.height);
   }
 
   moveNote() {
@@ -176,8 +184,8 @@ export class Game {
   }
 
   drawDotPoint() {
-    let width = this.boardDot.width,
-      height = this.board.height;
+    let width = this.HTMLdot.width,
+      height = this.HTMLboard.height;
     let middleHeight = height / 8;
     this.ctxDot.fillStyle = "#F21F0C";
     this.ctxDot.fillRect(0, 0, width, height);
@@ -193,7 +201,7 @@ export class Game {
     let PositionHeightDot = Math.min(Math.max(0, porcentLineDot / 2), 90);
     let invertedPositionHeightDot = 90 - PositionHeightDot;
     this.ctxDot.fillStyle = "white";
-    this.ctxDot.fillRect(0, invertedPositionHeightDot, this.boardDot.width, 5);
+    this.ctxDot.fillRect(0, invertedPositionHeightDot, this.HTMLdot.width, 5);
   }
 
   drawEffects() {
@@ -205,12 +213,12 @@ export class Game {
   drawEffectMissNote() {
     this.timeDurationMissNote--;
     if (this.missNote && this.timeDurationMissNote >= 0) {
-      this.ctx.font = "50px serif";
-      this.ctx.fillStyle = "rgba(255,255,255,0.9)";
-      this.ctx.fillText(
+      this.ctxBoard.font = "50px serif";
+      this.ctxBoard.fillStyle = "rgba(255,255,255,0.9)";
+      this.ctxBoard.fillText(
         "MISS",
         this.missNote.position - 2,
-        this.board.height - 80 + this.timeDurationMissNote,
+        this.HTMLboard.height - 80 + this.timeDurationMissNote,
         60
       );
     } else {
@@ -222,12 +230,12 @@ export class Game {
   drawEffectRightNote() {
     this.timeDurationRightNote--;
     if (this.rightNote && this.timeDurationRightNote >= 0) {
-      this.ctx.font = "50px serif";
-      this.ctx.fillStyle = "rgba(255,255,255,0.9)";
-      this.ctx.fillText(
+      this.ctxBoard.font = "50px serif";
+      this.ctxBoard.fillStyle = "rgba(255,255,255,0.9)";
+      this.ctxBoard.fillText(
         "🔥",
         this.rightNote.position - 2,
-        this.board.height -
+        this.HTMLboard.height -
           20 +
           Math.floor((Math.random() * this.timeDurationRightNote) / 3),
         60
@@ -240,16 +248,30 @@ export class Game {
 
   drawEffectWrongNote() {
     this.timeDurationWrongNote--;
-    const gradient = this.ctx.createLinearGradient(0, -500, 0, 360);
+    const gradient = this.ctxBoard.createLinearGradient(0, -500, 0, 360);
     gradient.addColorStop(0, "rgba(0,0,0,0.1)");
     gradient.addColorStop(1, "rgba(100,50,150,0.2)");
-    this.ctx.fillStyle = gradient;
+    this.ctxBoard.fillStyle = gradient;
     if (this.timeDurationWrongNote >= 0 && this.wrongNote == true) {
-      this.ctx.fillRect(0, 0, this.board.width, this.board.height);
+      this.ctxBoard.fillRect(0, 0, this.HTMLboard.width, this.HTMLboard.height);
     } else {
       this.timeDurationWrongNote = this.speedEffectGame / 2;
       this.wrongNote = false;
     }
+  }
+
+  drawProgressTimeMatch() {
+    const { width, height } = this.HTMLprogressMatch;
+
+    const gradient = this.ctxProgressMatch.createLinearGradient(10, 80, 0, 1);
+    gradient.addColorStop(0, "rgba(20,20,50,0.2)");
+    gradient.addColorStop(1, "rgba(80,80,120,0.2)");
+    this.ctxProgressMatch.fillStyle = gradient;
+    this.ctxProgressMatch.fillRect(0, 0, width, height);
+
+    this.ctxProgressMatch.fillStyle = "rgb(200,60,30)";
+    this.ctxProgressMatch.fillRect(0, height -this.progressLine, width, this.progressLine);
+ 
   }
 
   checkMissNote() {
@@ -329,13 +351,13 @@ export class Game {
 
   UpddateCurrentCombo() {
     if (this.CurrentMatch.addComboNote >= 50) {
-      this.ctx.font = "30px serif";
-      this.ctx.fontStretch = "extra-expanded";
-      this.ctx.fillStyle = "rgba(255,255,255,0.9)";
-      this.ctx.fillText(
+      this.ctxBoard.font = "30px serif";
+      this.ctxBoard.fontStretch = "extra-expanded";
+      this.ctxBoard.fillStyle = "rgba(255,255,255,0.9)";
+      this.ctxBoard.fillText(
         this.CurrentMatch.addComboNote,
-        this.board.width / 2 - 10,
-        this.board.height / 2 + 50,
+        this.HTMLboard.width / 2 - 10,
+        this.HTMLboard.height / 2 + 50,
         140
       );
     }
@@ -384,6 +406,7 @@ export class Game {
   gameLoop() {
     if (this.running) {
       this.clearBoard();
+      this.drawProgressTimeMatch();
       this.drawGuitar();
       this.TextDraw();
       this.drawDotPoint();

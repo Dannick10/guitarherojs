@@ -63,7 +63,15 @@ main{
     align-items: center;
     color: rgb(0, 0, 0);
     border-radius: 50%;
-  
+}
+
+#progressMatch {
+    position: absolute;
+    right: -1em;
+    top: 0;
+    width: 1em;
+    height: 100%;
+    border: 1px solid grey;
 }
 
 #green{
