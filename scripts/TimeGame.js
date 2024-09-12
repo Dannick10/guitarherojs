@@ -6,7 +6,7 @@ export class Time {
       minute: 0,
       second: 0,
     };
-    this.running = true
+    this.running = true;
   }
 
   getstartTime() {
@@ -43,7 +43,13 @@ export class Time {
   }
 
   backMatchTime() {
-    this.running = true
+    this.running = true;
+  }
+
+  getLinePorcent() {
+    const line = (this.startTIme / this.endTime) * 100;
+ 
+    return line
   }
 
   overGame() {
