@@ -7,6 +7,7 @@ export class Time {
       second: 0,
     };
     this.running = true;
+    this.velocityGame = 1000
   }
 
   getstartTime() {
@@ -32,9 +33,7 @@ export class Time {
         this.formateTime(this.startTIme);
         this.overGame();
         this.startMatchTime();
-        console.log(this.timeMatch);
-        console.log(this.getstartTime());
-      }, 1000);
+      }, this.velocityGame);
     }
   }
 

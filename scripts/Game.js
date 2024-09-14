@@ -169,6 +169,15 @@ export class Game {
     this.managerPointsMatch("ADDNOTE");
   }
 
+  readNote(actualNote) {
+    console.log(actualNote);  
+    if (actualNote) {
+        let selectNote = { ...this.tileNotes[actualNote.note] }; 
+        this.currentNote.push(selectNote); 
+
+    }
+}
+
   generateNumber(dificulty) {
     return Math.floor(Math.random() * dificulty);
   }
@@ -418,5 +427,19 @@ export class Game {
       this.overGame();
       requestAnimationFrame(() => this.gameLoop());
     }
+  }
+
+
+  readMusicmaking() {
+      this.clearBoard()
+      this.drawProgressTimeMatch()
+      this.drawGuitar()
+      this.TextDraw()
+      this.drawNote()
+      this.moveNote()
+      this.checkMissNote();
+      this.drawEffects();
+      this.drawDotPoint()
+      requestAnimationFrame(() => this.readMusicmaking())  
   }
 }
