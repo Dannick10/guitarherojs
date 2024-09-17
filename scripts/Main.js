@@ -6,7 +6,6 @@ const timeGame = new Time(0, 100);
 const guitarHeroGame = new Game();
 
 function InitialGame() {
-
   screen.innerHTML = `
     <div>
       <canvas width="300" height="500" id="game"></canvas>
@@ -22,8 +21,6 @@ function InitialGame() {
   guitarHeroGame.startGame();
   guitarHeroGame.running = true;
 
-
- 
   const intervalId = setInterval(() => {
     guitarHeroGame.progressLine = timeGame.getLinePorcent();
 
@@ -42,7 +39,6 @@ function InitialGame() {
   }, 1000);
 }
 
-
 function mainScreen() {
   screen.innerHTML = `
     <section class="main_game">
@@ -54,13 +50,10 @@ function mainScreen() {
     </section>
   `;
 
-
   document.querySelector(".btn_options").addEventListener("click", settings);
   document.querySelector(".btn_about").addEventListener("click", about);
 
-  setTimeout(() => {
-    document.querySelector(".start").addEventListener("click", InitialGame)
-    ,1000})
+  document.querySelector(".start").addEventListener("click", changeDificulty);
 }
 
 function settings() {
@@ -94,7 +87,7 @@ function changeNote() {
       ${guitarHeroGame.controls.note2}
       </button>
       </div>
-      <div><button class="btn btn_options circle " style="background-color: yellow;" id="3">
+      <div><button class="btn btn_options circle " style="background-color: orange;" id="3">
       ${guitarHeroGame.controls.note3}
       </button>
       </div>
@@ -148,6 +141,33 @@ function changeNote() {
   document.querySelector(".goback").addEventListener("click", settings);
 }
 
+function changeDificulty() {
+  screen.innerHTML = `
+  <section class="main_game">
+    <div class="main_game_section  config_dificulty_wallpaper" >
+      <button id="3" class="btn dificulty" style="background: #109030;">Facil</button id="3">
+      <button id="4" class="btn dificulty"  style="background: #205080;">Medio</button>
+      <button id="5" class="btn dificulty"  style="background: #902;">Dificil</button>
+      <div>
+      <button class="btn goback"> Voltar</button>
+    </div>
+    </div>
+  </section>
+`;
+
+  const btn = [...document.querySelectorAll(".dificulty")];
+
+  btn.forEach((button) => {
+    button.addEventListener("click", (event) => {
+      const { target } = event;
+      guitarHeroGame.dificulty = target.id;
+      InitialGame()
+    });
+  });
+
+  document.querySelector(".goback").addEventListener("click", mainScreen);
+}
+
 function about() {
   screen.innerHTML = `
   <section class="main_game">
@@ -167,4 +187,4 @@ function about() {
   document.querySelector(".goback").addEventListener("click", mainScreen);
 }
 
-mainScreen()
+mainScreen();

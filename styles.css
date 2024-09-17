@@ -116,7 +116,12 @@ main {
 .config_about_wallpaper {
   background: url(images/Leonardo_Phoenix_A_sleek_electric_guitar_lies_horizontally_on_0.jpg) center center;
   background-size: cover;
-  transition: 1s cubi;
+}
+
+.config_dificulty_wallpaper{
+  background: url(images/Leonardo_Phoenix_A_colorful_illustration_of_a_customized_Guita_1.jpg) center center;
+  background-size: cover;
+  animation:  guitarleft2 1s reverse;
 }
 
 
