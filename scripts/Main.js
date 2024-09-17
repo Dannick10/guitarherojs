@@ -29,11 +29,12 @@ function InitialGame(time) {
     guitarHeroGame.progressLine = timeGame.getLinePorcent();
 
     if (timeGame.startTIme >= timeGame.endTime) {
+      guitarHeroGame.endMatch = true;
       setTimeout(() => {
         guitarHeroGame.running = false;
         clearInterval(intervalId);
         console.table(guitarHeroGame.CurrentMatch);
-      }, 100);
+      }, 5000);
     }
 
     if (!guitarHeroGame.running) {
@@ -183,7 +184,7 @@ function changeTime() {
   <div class="main_game_section  config_dificulty_wallpaper" >
   <div style="background: black; padding: 4px; rotate: -2deg">
   <div class="title_section">
-  <h2 class="title">${time} minuto</h2>
+  <h2 class="title">${time} minutos</h2>
   </div>
   </div>
   <button id="3" class="btn dificulty odd" style="background: #005050;">+</button id="3">
@@ -206,15 +207,16 @@ function changeTime() {
     if (ranger <= time) {
       ranger++;
       time = Math.min(Math.max(1, ranger), maxNumber);
-      text.innerHTML = `${time} minuto`;
-    }
+      text.innerHTML = `${time} minutos`;
+    } 
+
   });
 
   decrease.addEventListener("click", () => {
     if (ranger >= time) {
       ranger--;
       time = Math.min(Math.max(1, ranger), maxNumber);
-      text.innerHTML = `${time} minuto`;
+      text.innerHTML = `${time} minutos`;
     }
   });
 

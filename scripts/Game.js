@@ -45,7 +45,8 @@ export class Game {
     this.timeDurationMissNote = this.speedEffectGame;
     this.timeDurationRightNote = this.speedEffectGame;
     this.timeDurationWrongNote = this.speedEffectGame;
-    this.progressLine = 0
+    this.progressLine = 0;
+    this.endMatch = false;
 
     this.controls = {
       note1: "a",
@@ -170,13 +171,12 @@ export class Game {
   }
 
   readNote(actualNote) {
-    console.log(actualNote);  
+    console.log(actualNote);
     if (actualNote) {
-        let selectNote = { ...this.tileNotes[actualNote.note] }; 
-        this.currentNote.push(selectNote); 
-
+      let selectNote = { ...this.tileNotes[actualNote.note] };
+      this.currentNote.push(selectNote);
     }
-}
+  }
 
   generateNumber(dificulty) {
     return Math.floor(Math.random() * dificulty);
@@ -279,8 +279,12 @@ export class Game {
     this.ctxProgressMatch.fillRect(0, 0, width, height);
 
     this.ctxProgressMatch.fillStyle = "rgb(200,60,30)";
-    this.ctxProgressMatch.fillRect(0, height -this.progressLine, width, this.progressLine);
- 
+    this.ctxProgressMatch.fillRect(
+      0,
+      height - this.progressLine,
+      width,
+      this.progressLine
+    );
   }
 
   checkMissNote() {
@@ -396,8 +400,10 @@ export class Game {
   generateNotes() {
     if (this.running) {
       setTimeout(() => {
-        this.randomNote();
-        this.generateNotes();
+        if (!this.endMatch) {
+          this.randomNote();
+          this.generateNotes();
+        }
       }, this.VelocityGenerateNote);
     }
   }
@@ -418,7 +424,9 @@ export class Game {
   }
 
   overGame() {
-    if (this.CurrentMatch.rangerLineDot <= -3) this.running = false;
+    setTimeout(() => {
+      if (this.CurrentMatch.rangerLineDot <= -3) this.running = false;
+    }, 1000);
   }
 
   gameLoop() {
@@ -437,5 +445,4 @@ export class Game {
       requestAnimationFrame(() => this.gameLoop());
     }
   }
-
 }
