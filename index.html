@@ -7,13 +7,15 @@
     <title>Guitar Hero</title>
 </head>
 <body>
-    <main>
-        <canvas width="300" height="500" id="game"></canvas>
-        <div class="pointsScore">
-            <p>0</p>
+    <main class="screen">
+        <div >
+            <canvas width="300" height="500" id="game"></canvas>
+            <div class="pointsScore">
+                <p>0</p>
+            </div>
+            <canvas width="30" height="100" id="dotPoint"></canvas>
+            <canvas width="30" height="100" id="progressMatch"></canvas>
         </div>
-        <canvas width="30" height="100" id="dotPoint"></canvas>
-        <canvas width="30" height="100" id="progressMatch"></canvas>
     </main>
     <section class="controls">
         <div id="green">A</div>
@@ -26,5 +28,5 @@
 <script type="module" src="scripts/Main.js"></script>
 <script type="module" src="scripts/Game.js"></script>
 <script type="module" src="scripts/TimeGame.js"></script>
-
+<script src="https://kit.fontawesome.com/e98b48dcc9.js" crossorigin="anonymous"></script>
 </html>

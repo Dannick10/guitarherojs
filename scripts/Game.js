@@ -404,6 +404,12 @@ export class Game {
 
   startGame() {
     this.running = true;
+    this.HTMLboard = document.querySelector("#game");
+    this.HTMLdot = document.querySelector("#dotPoint");
+    this.HTMLprogressMatch = document.querySelector("#progressMatch");
+    this.ctxBoard = this.HTMLboard.getContext("2d");
+    this.ctxDot = this.HTMLdot.getContext("2d");
+    this.ctxProgressMatch = this.HTMLprogressMatch.getContext("2d");
     this.gameLoop();
     this.generateNotes();
   }
@@ -429,17 +435,4 @@ export class Game {
     }
   }
 
-
-  readMusicmaking() {
-      this.clearBoard()
-      this.drawProgressTimeMatch()
-      this.drawGuitar()
-      this.TextDraw()
-      this.drawNote()
-      this.moveNote()
-      this.checkMissNote();
-      this.drawEffects();
-      this.drawDotPoint()
-      requestAnimationFrame(() => this.readMusicmaking())  
-  }
 }
