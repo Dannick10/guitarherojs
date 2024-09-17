@@ -1,5 +1,6 @@
 import { Time } from "./TimeGame.js";
 import { Game } from "./Game.js";
+import { IconReturn, IconSettings, Iconabout, Iconplay } from "./Icons.js"
 
 const screen = document.querySelector(".screen");
 const timeGame = new Time(0, 100);
@@ -43,9 +44,9 @@ function mainScreen() {
   screen.innerHTML = `
     <section class="main_game">
       <div class="main_game_section" >
-        <button class="btn start">Jogar</button>
-        <button class="btn btn_options">Opções</button>
-        <button class="btn btn_about">Sobre</button>
+        <button class="btn start">${Iconplay}</button>
+        <button class="btn btn_options">${IconSettings}</button>
+        <button class="btn btn_about">${Iconabout}</button>
       </div>
     </section>
   `;
@@ -61,7 +62,7 @@ function settings() {
   <section class="main_game">
     <div class="main_game_section  config_game_wallpaper" >
       <button class="btn start">mudar notas</button>
-      <button class="btn btn_options goback">voltar</button>
+      <button class="btn btn_options goback">${IconReturn}</button>
     </div>
   </section>
 `;
@@ -101,7 +102,7 @@ function changeNote() {
       </div>
       
       <div>v
-        <button class="btn goback"> Voltar</button>
+        <button class="btn goback">${IconReturn}</button>
       </div>
     </div>
   </section>
@@ -149,7 +150,7 @@ function changeDificulty() {
       <button id="4" class="btn dificulty"  style="background: #205080;">Medio</button>
       <button id="5" class="btn dificulty"  style="background: #902;">Dificil</button>
       <div>
-      <button class="btn goback"> Voltar</button>
+      <button class="btn goback">${IconReturn}</button>
     </div>
     </div>
   </section>
@@ -178,7 +179,7 @@ function about() {
       </div>
      
       <div>
-        <button class="btn goback"> Voltar</button>
+        <button class="btn goback">${IconReturn}</button>
       </div>
     </div>
   </section>

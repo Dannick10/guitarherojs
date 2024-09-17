@@ -257,3 +257,8 @@ main {
   letter-spacing: 4px;
   font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
 }
+
+.goback{
+  width: 100px;
+  font-size: 20px;
+}
