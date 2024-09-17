@@ -410,8 +410,11 @@ export class Game {
     this.ctxBoard = this.HTMLboard.getContext("2d");
     this.ctxDot = this.HTMLdot.getContext("2d");
     this.ctxProgressMatch = this.HTMLprogressMatch.getContext("2d");
+    this.pointBoard = document.querySelector(".pointsScore p");
     this.gameLoop();
-    this.generateNotes();
+    setTimeout(() => {
+      this.generateNotes();
+    }, 1000);
   }
 
   overGame() {

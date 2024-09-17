@@ -1,12 +1,13 @@
 import { Time } from "./TimeGame.js";
 import { Game } from "./Game.js";
-import { IconReturn, IconSettings, Iconabout, Iconplay } from "./Icons.js"
+import { IconReturn, IconSettings, Iconabout, Iconplay } from "./Icons.js";
 
 const screen = document.querySelector(".screen");
-const timeGame = new Time(0, 100);
 const guitarHeroGame = new Game();
 
-function InitialGame() {
+function InitialGame(time) {
+  const timeGame = new Time(0, time);
+
   screen.innerHTML = `
     <div>
       <canvas width="300" height="500" id="game"></canvas>
@@ -17,6 +18,8 @@ function InitialGame() {
       <canvas width="30" height="100" id="progressMatch"></canvas>
     </div>
   `;
+
+  document.querySelector(".visible").classList.remove("visible");
 
   timeGame.startMatchTime();
   guitarHeroGame.startGame();
@@ -165,11 +168,64 @@ function changeDificulty() {
     button.addEventListener("click", (event) => {
       const { target } = event;
       guitarHeroGame.dificulty = target.id;
-      InitialGame()
+      changeTime();
     });
   });
 
   document.querySelector(".goback").addEventListener("click", mainScreen);
+}
+
+function changeTime() {
+  let time = 1;
+
+  screen.innerHTML = `
+  <section class="main_game">
+  <div class="main_game_section  config_dificulty_wallpaper" >
+  <div style="background: black; padding: 4px; rotate: -2deg">
+  <div class="title_section">
+  <h2 class="title">${time} minuto</h2>
+  </div>
+  </div>
+  <button id="3" class="btn dificulty odd" style="background: #005050;">+</button id="3">
+  <button id="3" class="btn dificulty decrease" style="background: #800000;">-</button id="3"> 
+  <div style="display: flex; flex-direction: column-reverse; gap: 30px">
+  <button class="btn goback">${IconReturn}</button>
+  <button class="btn play">${Iconplay}</button>
+  </div>
+  </div>
+  </section>
+  `;
+
+  const text = document.querySelector(".title");
+  const odd = document.querySelector(".odd");
+  const decrease = document.querySelector(".decrease");
+  let ranger = 1;
+  let maxNumber = 15;
+
+  odd.addEventListener("click", () => {
+    if (ranger <= time) {
+      ranger++;
+      time = Math.min(Math.max(1, ranger), maxNumber);
+      text.innerHTML = `${time} minuto`;
+    }
+  });
+
+  decrease.addEventListener("click", () => {
+    if (ranger >= time) {
+      ranger--;
+      time = Math.min(Math.max(1, ranger), maxNumber);
+      text.innerHTML = `${time} minuto`;
+    }
+  });
+
+  const ConvertMinute = (time) => {
+    return time * 60
+  }
+
+  document.querySelector(".goback").addEventListener("click", changeDificulty);
+  document
+    .querySelector(".play")
+    .addEventListener("click", () => InitialGame(ConvertMinute(time)));
 }
 
 function about() {
@@ -198,4 +254,4 @@ function about() {
 }
 
 mainScreen();
-about()
+changeTime();
