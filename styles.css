@@ -1,7 +1,21 @@
+@import url('https://fonts.googleapis.com/css2?family=Unlock&display=swap');
+
 * {
   margin: 0;
   padding: 0;
 }
+
+::-webkit-scrollbar-track {
+    background-color: #b0b0b02e;
+}
+::-webkit-scrollbar {
+    width: 6px;
+    background: #cdcdcd2d;
+}
+::-webkit-scrollbar-thumb {
+    background: #7408c696;
+}
+
 
 body {
   display: flex;
@@ -10,6 +24,44 @@ body {
   justify-content: center;
   align-items: center;
   background-color: rgb(233, 233, 233);
+}
+
+.title_section {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(red 15%, yellow);
+  -webkit-background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.title{
+  font-family: "Unlock", serif;
+  word-spacing: 20px;
+  letter-spacing: 4px;
+  font-size: 2em;
+  color: white;
+  background-clip: text;
+  
+}
+
+.box{
+  border: 1px solid white;
+  height: 20em;
+  margin: auto;
+  overflow-y: scroll;
+  top: 0;
+  background-color: rgba(0, 0, 0, 0.9);
+  font-size: .9em;
+  letter-spacing: .3em;
+  text-align: left;
+  line-height: 1.5em;
+  margin: 20px 0;
+  padding: 10px 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 2em;
 }
 
 

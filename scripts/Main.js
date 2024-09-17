@@ -43,7 +43,10 @@ function InitialGame() {
 function mainScreen() {
   screen.innerHTML = `
     <section class="main_game">
-      <div class="main_game_section" >
+    <div class="title_section">
+    <h2 class="title">Random Hero</h2>
+    </div>
+    <div class="main_game_section" >
         <button class="btn start">${Iconplay}</button>
         <button class="btn btn_options">${IconSettings}</button>
         <button class="btn btn_about">${Iconabout}</button>
@@ -175,6 +178,12 @@ function about() {
     <div class="main_game_section config_about_wallpaper">
       <div class="textinfo" style="text-align: center;">
         <h2>Sobre o randomHero</h2>
+        <div class="box">
+          <p>O RandomHero é um jogo inspirado no clássico estilo Guitar Hero, onde os jogadores precisam acertar as notas que descem pela tela no tempo certo para marcar pontos. Desenvolvi este projeto com foco em proporcionar uma experiência divertida e desafiadora, com controles personalizados e mecânicas de jogo dinâmicas. Espero que você se divirta jogando tanto quanto eu me diverti desenvolvendo!</p>
+          <p>
+          Meu nome é Daniel Rocha, sou desenvolvedor frontend com experiência em tecnologias como HTML, CSS, JavaScript, React, TailwindCSS, TypeScript e Next.js. Sempre busco criar interfaces interativas e eficientes que ofereçam uma boa experiência para os usuários. O RandomHero é uma das minhas criações, combinando meu amor por desenvolvimento e jogos.
+          </p>
+        </div>
         <p>Jogo criado por DanielRocha</p>
       </div>
      
@@ -189,3 +198,4 @@ function about() {
 }
 
 mainScreen();
+about()
