@@ -156,7 +156,7 @@ export class Game {
     this.ctxBoard.fontStretch = "extra-expanded";
     this.ctxBoard.fillStyle = "rgba(255,255,255,0.9)";
     this.ctxBoard.fillText(
-      "Guitar hero",
+      "Random hero",
       this.HTMLboard.width / 4,
       this.HTMLboard.height / 2,
       140
