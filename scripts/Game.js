@@ -171,7 +171,6 @@ export class Game {
   }
 
   readNote(actualNote) {
-    console.log(actualNote);
     if (actualNote) {
       let selectNote = { ...this.tileNotes[actualNote.note] };
       this.currentNote.push(selectNote);

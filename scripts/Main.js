@@ -1,6 +1,12 @@
 import { Time } from "./TimeGame.js";
 import { Game } from "./Game.js";
-import {IconReset, IconReturn, IconSettings, Iconabout, Iconplay } from "./Icons.js";
+import {
+  IconReset,
+  IconReturn,
+  IconSettings,
+  Iconabout,
+  Iconplay,
+} from "./Icons.js";
 
 const screen = document.querySelector(".screen");
 const guitarHeroGame = new Game();
@@ -24,7 +30,6 @@ function InitialGame(time) {
   timeGame.startMatchTime();
   guitarHeroGame.startGame();
   guitarHeroGame.running = true;
-  guitarHeroGame.VelocityGenerateNote = 120
 
   const intervalId = setInterval(() => {
     guitarHeroGame.progressLine = timeGame.getLinePorcent();
@@ -34,23 +39,21 @@ function InitialGame(time) {
       setTimeout(() => {
         guitarHeroGame.running = false;
         clearInterval(intervalId);
-        console.table(guitarHeroGame.CurrentMatch);
       }, 5000);
     }
 
     if (!guitarHeroGame.running) {
       clearInterval(intervalId);
-      scoreEndMatch()
+      scoreEndMatch();
       document.querySelector(".controls").classList.add("visible");
-      console.table(guitarHeroGame.CurrentMatch);
     }
   }, 1000);
 }
 
 function scoreEndMatch() {
-    const section = document.createElement('section')
+  const section = document.createElement("section");
 
-    section.innerHTML = `
+  section.innerHTML = `
       <div class="scoreEnd"> 
         <div> 
         <p>Total de Notas: ${guitarHeroGame.CurrentMatch.totalNoteMatch}</p>
@@ -65,16 +68,13 @@ function scoreEndMatch() {
           </div>
         </div>
       </div>
-    `
-    screen.appendChild(section)
-    
+    `;
+  screen.appendChild(section);
 
-    document.querySelector('.goback').addEventListener('click', mainScreen)
+  document.querySelector(".goback").addEventListener("click", mainScreen);
 
-    document.querySelector('.reset').addEventListener('click', InitialGame)
-  
+  document.querySelector(".reset").addEventListener("click", InitialGame);
 }
-
 
 function mainScreen() {
   screen.innerHTML = `
@@ -160,7 +160,6 @@ function changeNote() {
         button.innerHTML = keypress.key;
       }
     });
-    console.log(guitarHeroGame.controls);
   }
 
   const textinfo = (btn) => {
@@ -240,8 +239,7 @@ function changeTime() {
       ranger++;
       time = Math.min(Math.max(1, ranger), maxNumber);
       text.innerHTML = `${time} minutos`;
-    } 
-
+    }
   });
 
   decrease.addEventListener("click", () => {
@@ -253,13 +251,46 @@ function changeTime() {
   });
 
   const ConvertMinute = (time) => {
-    return time * 60
-  }
+    return time * 60;
+  };
 
   document.querySelector(".goback").addEventListener("click", changeDificulty);
   document
     .querySelector(".play")
-    .addEventListener("click", () => InitialGame(ConvertMinute(time)));
+    .addEventListener("click", () => changeVelocity(ConvertMinute(time)));
+}
+
+function changeVelocity(time) {
+  screen.innerHTML = `
+  <section class="main_game">
+    <div class="main_game_section  config_dificulty_wallpaper" >
+      <div class="velocity">
+      <h2>Velocidade</h2>
+      <h3 class="text">250</h3>
+      <input id="ranger" type="range" min="100" max="500" value="250"/>
+      <div>
+      <label class="checkbox"><input type='checkbox' name='checkbox' value='1' />Velocidade Dinamica <span></span></label>
+      </div>
+      </div>
+      <button class="btn play">${Iconplay}</button>
+      <button class="btn goback">${IconReturn}</button>
+    </div>
+    </div>
+  </section>
+`;
+
+  const text = document.querySelector(".text");
+
+  document.querySelector("#ranger").addEventListener("change", (e) => {
+    const { value } = e.target;
+    text.innerHTML = value;
+    guitarHeroGame.VelocityGenerateNote = value;
+  });
+
+  document.querySelector(".goback").addEventListener("click", changeTime);
+  document
+    .querySelector(".play")
+    .addEventListener("click", () => InitialGame(time));
 }
 
 function about() {
@@ -271,7 +302,7 @@ function about() {
         <div class="box">
           <p>O RandomHero é um jogo inspirado no clássico estilo Guitar Hero, onde os jogadores precisam acertar as notas que descem pela tela no tempo certo para marcar pontos. Desenvolvi este projeto com foco em proporcionar uma experiência divertida e desafiadora, com controles personalizados e mecânicas de jogo dinâmicas. Espero que você se divirta jogando tanto quanto eu me diverti desenvolvendo!</p>
           <p>
-          Meu nome é Daniel Rocha, sou desenvolvedor frontend com experiência em tecnologias como HTML, CSS, JavaScript, React, TailwindCSS, TypeScript e Next.js. Sempre busco criar interfaces interativas e eficientes que ofereçam uma boa experiência para os usuários. O RandomHero é uma das minhas criações, combinando meu amor por desenvolvimento e jogos.
+          Meu nome é Daniel Rocha, sou desenvolvedor frontend com experiência em tecnologias como HTML, CSS, JavaScript, React, TailwindCSS, TypeScript e Next.js. O RandomHero é uma das minhas criações, combinando meu amor por desenvolvimento e jogos.
           </p>
         </div>
         <p>Jogo criado por DanielRocha</p>
