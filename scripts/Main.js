@@ -10,9 +10,10 @@ import {
 
 const screen = document.querySelector(".screen");
 const guitarHeroGame = new Game();
+let minute = 60;
 
-function InitialGame(time) {
-  const timeGame = new Time(0, time);
+function InitialGame() {
+  const timeGame = new Time(0, minute);
 
   screen.innerHTML = `
     <div>
@@ -28,22 +29,23 @@ function InitialGame(time) {
   document.querySelector(".controls").classList.remove("visible");
   guitarHeroGame.resetGame();
   timeGame.startMatchTime();
+  timeGame.endTime = minute;
   guitarHeroGame.startGame();
   guitarHeroGame.running = true;
 
-  const intervalId = setInterval(() => {
+  const gameLoop = setInterval(() => {
     guitarHeroGame.progressLine = timeGame.getLinePorcent();
 
-    if (timeGame.startTIme >= timeGame.endTime) {
-      guitarHeroGame.endMatch = true;
-      setTimeout(() => {
-        guitarHeroGame.running = false;
-        clearInterval(intervalId);
-      }, 5000);
-    }
-
     if (!guitarHeroGame.running) {
-      clearInterval(intervalId);
+      guitarHeroGame.endMatch = true
+          scoreEndMatch();
+          document.querySelector(".controls").classList.add("visible");
+          clearInterval(gameLoop);
+        }
+
+    if (timeGame.startTIme >= timeGame.endTime) {
+      guitarHeroGame.running = false;
+      clearInterval(gameLoop);
       scoreEndMatch();
       document.querySelector(".controls").classList.add("visible");
     }
@@ -72,7 +74,6 @@ function scoreEndMatch() {
   screen.appendChild(section);
 
   document.querySelector(".goback").addEventListener("click", mainScreen);
-
   document.querySelector(".reset").addEventListener("click", InitialGame);
 }
 
@@ -239,6 +240,7 @@ function changeTime() {
       ranger++;
       time = Math.min(Math.max(1, ranger), maxNumber);
       text.innerHTML = `${time} minutos`;
+      ConvertMinute(time);
     }
   });
 
@@ -247,20 +249,19 @@ function changeTime() {
       ranger--;
       time = Math.min(Math.max(1, ranger), maxNumber);
       text.innerHTML = `${time} minutos`;
+      ConvertMinute(time);
     }
   });
 
   const ConvertMinute = (time) => {
-    return time * 60;
+    minute = time * 60;
   };
 
   document.querySelector(".goback").addEventListener("click", changeDificulty);
-  document
-    .querySelector(".play")
-    .addEventListener("click", () => changeVelocity(ConvertMinute(time)));
+  document.querySelector(".play").addEventListener("click", changeVelocity);
 }
 
-function changeVelocity(time) {
+function changeVelocity() {
   screen.innerHTML = `
   <section class="main_game">
     <div class="main_game_section  config_dificulty_wallpaper" >
@@ -268,9 +269,6 @@ function changeVelocity(time) {
       <h2>Velocidade</h2>
       <h3 class="text">250</h3>
       <input id="ranger" type="range" min="100" max="500" value="250"/>
-      <div>
-      <label class="checkbox"><input type='checkbox' name='checkbox' value='1' />Velocidade Dinamica <span></span></label>
-      </div>
       </div>
       <button class="btn play">${Iconplay}</button>
       <button class="btn goback">${IconReturn}</button>
@@ -288,9 +286,7 @@ function changeVelocity(time) {
   });
 
   document.querySelector(".goback").addEventListener("click", changeTime);
-  document
-    .querySelector(".play")
-    .addEventListener("click", () => InitialGame(time));
+  document.querySelector(".play").addEventListener("click", InitialGame);
 }
 
 function about() {
