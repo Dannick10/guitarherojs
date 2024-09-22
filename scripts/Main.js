@@ -1,6 +1,6 @@
 import { Time } from "./TimeGame.js";
 import { Game } from "./Game.js";
-import { IconReturn, IconSettings, Iconabout, Iconplay } from "./Icons.js";
+import {IconReset, IconReturn, IconSettings, Iconabout, Iconplay } from "./Icons.js";
 
 const screen = document.querySelector(".screen");
 const guitarHeroGame = new Game();
@@ -19,11 +19,12 @@ function InitialGame(time) {
     </div>
   `;
 
-  document.querySelector(".visible").classList.remove("visible");
-
+  document.querySelector(".controls").classList.remove("visible");
+  guitarHeroGame.resetGame();
   timeGame.startMatchTime();
   guitarHeroGame.startGame();
   guitarHeroGame.running = true;
+  guitarHeroGame.VelocityGenerateNote = 120
 
   const intervalId = setInterval(() => {
     guitarHeroGame.progressLine = timeGame.getLinePorcent();
@@ -39,10 +40,41 @@ function InitialGame(time) {
 
     if (!guitarHeroGame.running) {
       clearInterval(intervalId);
+      scoreEndMatch()
+      document.querySelector(".controls").classList.add("visible");
       console.table(guitarHeroGame.CurrentMatch);
     }
   }, 1000);
 }
+
+function scoreEndMatch() {
+    const section = document.createElement('section')
+
+    section.innerHTML = `
+      <div class="scoreEnd"> 
+        <div> 
+        <p>Total de Notas: ${guitarHeroGame.CurrentMatch.totalNoteMatch}</p>
+        <p>Maior combo: ${guitarHeroGame.CurrentMatch.totalComboNote}</p>
+        <p>notas certas: ${guitarHeroGame.CurrentMatch.totalRightNote}</p>
+        <p>notas erradas: ${guitarHeroGame.CurrentMatch.totalWrongNote}</p>
+        <p>notas perdidas: ${guitarHeroGame.CurrentMatch.totalMissNote}</p>
+
+          <div> 
+          <button class="btn btn_options reset">${IconReset}</button>
+          <button class="btn btn_options goback">${IconReturn}</button>
+          </div>
+        </div>
+      </div>
+    `
+    screen.appendChild(section)
+    
+
+    document.querySelector('.goback').addEventListener('click', mainScreen)
+
+    document.querySelector('.reset').addEventListener('click', InitialGame)
+  
+}
+
 
 function mainScreen() {
   screen.innerHTML = `
@@ -256,4 +288,3 @@ function about() {
 }
 
 mainScreen();
-changeTime();

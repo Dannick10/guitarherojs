@@ -298,7 +298,8 @@ export class Game {
   }
 
   PlayNote(keypress) {
-    if (this.currentNote[0].note == keypress) {
+
+    if (this.currentNote[0]?.note == keypress) {
       if (
         this.currentNote[0].velocityY >=
         this.noteLimiting - this.unitsize + 20
@@ -316,7 +317,7 @@ export class Game {
       this.wrongNote = true;
       this.managerPointsMatch("ADDWRONGNOTE");
     }
-  }
+  } 
 
   managerPointsMatch(action) {
     switch (action) {
@@ -427,6 +428,27 @@ export class Game {
     setTimeout(() => {
       if (this.CurrentMatch.rangerLineDot <= -3) this.running = false;
     }, 1000);
+  }
+
+  resetGame() {
+      this.CurrentMatch = {
+      totalpoints: 0,
+      totalNoteMatch: 0,
+      totalMissNote: 0,
+      totalRightNote: 0,
+      totalWrongNote: 0,
+      totalComboNote: 0,
+      addComboNote: 0,
+      rangerLineDot: 5,
+    };
+
+    this.currentNote = []
+    this.progressLine = 0;
+    this.missNote = null;
+    this.rightNote = null;
+    this.wrongNote = false;
+    
+    this.clearBoard()
   }
 
   gameLoop() {
