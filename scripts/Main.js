@@ -36,26 +36,29 @@ function InitialGame() {
     guitarHeroGame.progressLine = timeGame.getLinePorcent();
 
     if (!guitarHeroGame.running) {
-          scoreEndMatch();
-          document.querySelector(".controls").classList.add("visible");
-          clearInterval(gameLoop);
-        }
+      scoreEndMatch('Voçê perdeu');
+      document.querySelector(".controls").classList.add("visible");
+      clearInterval(gameLoop);
+    }
 
     if (timeGame.startTIme >= timeGame.endTime) {
       guitarHeroGame.running = false;
       clearInterval(gameLoop);
-      scoreEndMatch();
+      scoreEndMatch('voçê é fera');
       document.querySelector(".controls").classList.add("visible");
     }
   }, 1000);
 }
 
-function scoreEndMatch() {
+function scoreEndMatch(title) {
   const section = document.createElement("section");
 
   section.innerHTML = `
       <div class="scoreEnd"> 
-        <div> 
+      <div> 
+      <div class="title_section">
+    <p class="title scoreTitle">${title}</p>
+    </div>
         <p>Total de Notas: ${guitarHeroGame.CurrentMatch.totalNoteMatch}</p>
         <p>Maior combo: ${guitarHeroGame.CurrentMatch.totalComboNote}</p>
         <p>notas certas: ${guitarHeroGame.CurrentMatch.totalRightNote}</p>
@@ -117,7 +120,6 @@ function changeNote() {
       <div class="textinfo">
         <p>Aperte em qualquer tecla</p>
       </div>
-
       <div><button class="btn start circle" style=" background-color: green;" id="1">
       ${guitarHeroGame.controls.note1}
       </button>

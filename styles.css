@@ -418,3 +418,9 @@ input[type="range"]:focus::-moz-range-thumb{
   outline: 3px solid white;
   outline-offset: 0.125rem;
 }
+.scoreTitle{
+  font-size: 1.2em;
+  font-stretch: condensed;
+  word-spacing: .1em;
+  text-align: center;
+}
