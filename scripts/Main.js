@@ -29,7 +29,6 @@ function InitialGame() {
   document.querySelector(".controls").classList.remove("visible");
   guitarHeroGame.resetGame();
   timeGame.startMatchTime();
-  timeGame.endTime = minute;
   guitarHeroGame.startGame();
   guitarHeroGame.running = true;
 
@@ -37,7 +36,6 @@ function InitialGame() {
     guitarHeroGame.progressLine = timeGame.getLinePorcent();
 
     if (!guitarHeroGame.running) {
-      guitarHeroGame.endMatch = true
           scoreEndMatch();
           document.querySelector(".controls").classList.add("visible");
           clearInterval(gameLoop);
